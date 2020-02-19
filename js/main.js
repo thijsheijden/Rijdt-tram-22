@@ -1,38 +1,26 @@
-const Http = new XMLHttpRequest();
-const url = 'https://v0.ovapi.nl/line/QBUZZ_u022_1';
+fetch('js/request.graphql')
+.then((response) => {
+  return response.text();
+})
+.then((query) => {
+  checkTime(query);
+});
 
-Http.onreadystatechange = (e) => {
-  if(Http.readyState == 4 && Http.status == 200) {
-    parseData(Http.responseText);
+function doCORSRequest(options, retrieveData) {
+  var x = new XMLHttpRequest();
+  x.open(options.method, options.url);
+  x.onload = x.onerror = function() {
+    retrieveData(
+      (x.responseText || '')
+    );
+  };
+  if (/^POST/i.test(options.method)) {
+    x.setRequestHeader('Content-Type', 'application/json');
   }
+  x.send(options.data);
 }
 
-function parseData(text) {
-  let json = JSON.parse(text);
-  let currentRides = json["QBUZZ_u022_1"]["Actuals"];
-  let numberOfRides = Object.keys(currentRides).length;
-
-  // Looping through the current rides, if more than half is CANCELED, tram 22 is not driving
-  let numberOfRidesCancelled = 0;
-  for (var key in currentRides) {
-    if (currentRides.hasOwnProperty(key)) {
-      if (currentRides[key]["TripStopStatus"] == "CANCEL") {
-        numberOfRidesCancelled += 1;
-      }
-    }
-  }
-
-  if (numberOfRidesCancelled > 1) {
-    this.setInnerHTML("rijdtTram22H1", "Nee");
-    this.setInnerHTML("redenDatTramNietRijdt", "Want er is een storing");
-  } else if (numberOfRides == 0) {
-    this.setInnerHTML("rijdtTram22H1", "Nee");
-  } else {
-    this.setInnerHTML("rijdtTram22H1", "Ja!");
-  }
-}
-
-function checkTime() {
+function checkTime(query) {
   let weKnow = false;
   let date = new Date();
   let day = date.getDay();
@@ -61,15 +49,26 @@ function checkTime() {
 
   // If we do not yet know if tram 22 is driving
   if (!weKnow) {
-    Http.open("GET", url);
-    Http.send();
+    doCORSRequest({
+      method: 'POST',
+      url: 'https://www.qbuzz.nl/api/website/graphql',
+      data: JSON.stringify({"query": query})
+    }, function retrieveData(result) {
+      this.parseData(result);
+    });
+  }
+}
+
+function parseData(json) {
+  let parsed = JSON.parse(json);
+  if (parsed.data.website.qry.items.edges.length == 0) {
+    this.setInnerHTML("rijdtTram22H1", "Ja!");
+  } else {
+    this.setInnerHTML("rijdtTram22H1", "Nee");
+    this.setInnerHTML("redenDatTramNietRijdt", "Want er is een storing");
   }
 }
 
 function setInnerHTML(id, text) {
   document.getElementById(id).innerHTML = text;
-}
-
-window.onload = function() {
-  this.checkTime();
 }

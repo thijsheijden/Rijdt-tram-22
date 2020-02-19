@@ -1,0 +1,65 @@
+query {
+website(id: "U_OV") {
+...DisruptionList
+}
+}
+
+fragment DisruptionList on GQWebsite {
+qry: disruptions(query: "22") {
+items: disruptions(first: 10, after: null) {
+edges {
+node {
+__typename
+...DisruptionItem_item
+}
+cursor
+}
+pageInfo {
+hasNextPage
+endCursor
+}
+}
+}
+}
+
+fragment DisruptionItem_item on GQDisruption {
+advice
+cause
+createdAt
+disruptionId
+effect
+status
+id
+measure
+name
+quays {
+quay {
+stopplace {
+name
+id
+uri
+place {
+town
+name
+}
+}
+}
+}
+routeDirections {
+routeDirection {
+dataOwner
+destination
+direction
+internalId
+}
+route {
+publicLineNr
+}
+}
+type
+updatedAt
+validFrom
+validTo
+website
+}
+
