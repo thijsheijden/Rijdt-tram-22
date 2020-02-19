@@ -1,0 +1,137 @@
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('fonts/LemonMilkReg.ttf') format("truetype");
+}
+
+body {
+ background-color: #f7ee49;
+ text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color:  #1DA1F2;
+}
+
+#rijdtTram22H1 {
+  font-family: 'LemonMilk', serif;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 164px;
+  font-size: 45vw;
+}
+
+#redenDatTramNietRijdt {
+  font-family: 'LemonMilk', serif;
+  font-size: 16px;
+  font-size: 3.8vw;
+  margin: 0;
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#rechten {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 95%;
+  font-family: 'LemonMilk', serif;
+  margin: 0;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+}
+
+/* Tooltip */
+/* Tooltip container */
+.tooltip {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  bottom: 6.5%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  font-family: 'LemonMilk', serif;
+  font-size: 12px;
+
+  visibility: hidden;
+  width: 275px;
+  background-color: #000;
+  color: #f7ee49;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  -ms-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
+  left: 50%;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* iPads */
+@media only screen and (min-width: 768px) {
+  #rijdtTram22H1 {
+    font-size: 256px;
+  }
+
+  .tooltip {
+    bottom: 1.5%;
+  }
+
+  #rechten {
+    width: 80%;
+  }
+
+  #redenDatTramNietRijdt {
+    font-size: 24px;
+    top: calc(50% + 150px);
+  }
+}
+
+/* Laptops and desktops */
+@media only screen and (min-width: 1200px) {
+  #rijdtTram22H1 {
+    font-size: 312px;
+  }
+
+  #redenDatTramNietRijdt {
+    font-size: 30px;
+    top: calc(50% + 180px);
+  }
+}
