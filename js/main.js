@@ -51,7 +51,7 @@ function checkTime(query) {
   if (!weKnow) {
     doCORSRequest({
       method: 'POST',
-      url: 'https://www.qbuzz.nl/api/website/graphql',
+      url: 'https://rijdt-tram-22.herokuapp.com/https://www.qbuzz.nl/api/website/graphql',
       data: JSON.stringify({"query": query})
     }, function retrieveData(result) {
       this.parseData(result);
