@@ -17,7 +17,7 @@ a {
   font-family: 'LemonMilk', serif;
   margin: 0;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -31,10 +31,11 @@ a {
   font-size: 3.8vw;
   margin: 0;
   position: absolute;
-  top: 68%;
+  top: 55%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  width: 80%;
 }
 
 #rechten {
@@ -120,7 +121,7 @@ a {
 
   #redenDatTramNietRijdt {
     font-size: 24px;
-    top: calc(50% + 150px);
+    top: calc(40% + 150px);
   }
 }
 

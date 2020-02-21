@@ -27,7 +27,7 @@ function checkTime(query) {
   let hour = date.getHours();
 
   // If its the weekend
-  if (day >= 5) {
+  if (day == 0 || day == 6) {
     setInnerHTML("rijdtTram22H1", "Nee");
     setInnerHTML("redenDatTramNietRijdt", "Want het is weekend!");
     weKnow = true;
@@ -52,7 +52,7 @@ function checkTime(query) {
     doCORSRequest({
       method: 'POST',
       url: 'https://rijdt-tram-22.herokuapp.com/https://www.qbuzz.nl/api/website/graphql',
-      data: JSON.stringify({"query": query})
+      data: JSON.stringify({"query": query, variables: {"dateTime": new Date().toISOString()}})
     }, function retrieveData(result) {
       this.parseData(result);
     });
@@ -63,10 +63,37 @@ function parseData(json) {
   let parsed = JSON.parse(json);
   if (parsed.data.website.qry.items.edges.length == 0) {
     this.setInnerHTML("rijdtTram22H1", "Ja!");
+    if (parsed.data.website.centraalNaarSciencePark.routes.length > 0) {
+      let journeyToUtrechtCS = parsed.data.website.scienceParkNaarCentraal;
+      let journeyToUtrechtSP = parsed.data.website.centraalNaarSciencePark;
+      this.setInnerHTML("redenDatTramNietRijdt", getNextDepartureToSciencePark(journeyToUtrechtSP) + "<br>" + getNextDepartureToUtrechtCentraal(journeyToUtrechtCS));
+    }
   } else {
     this.setInnerHTML("rijdtTram22H1", "Nee");
     this.setInnerHTML("redenDatTramNietRijdt", "Want er is een storing");
   }
+}
+
+function getNextDepartureToSciencePark(journey) {
+  let nextDeparture = journey.routes[2].legs[1].travelOptions[0].publicTransport.departure;
+  let nextDepartureTimeInMilliseconds = Date.parse(nextDeparture);
+  let departureTime = new Date(nextDepartureTimeInMilliseconds);
+  return "Volgende tram naar Utrecht Science Park: " + addAZero(departureTime.getHours()) + ":" + addAZero(departureTime.getMinutes());
+}
+
+function getNextDepartureToUtrechtCentraal(journey) {
+  let nextDeparture = journey.routes[2].legs[1].travelOptions[0].publicTransport.departure;
+  let nextDepartureTimeInMilliseconds = Date.parse(nextDeparture);
+  let departureTime = new Date(nextDepartureTimeInMilliseconds);
+  return "Volgende tram naar Utrecht Centraal (Heidelberglaan): " + addAZero(departureTime.getHours()) + ":" + addAZero(departureTime.getMinutes());
+}
+
+// If a time number is under 10, add a zero in front of it
+function addAZero(value) {
+  if (value < 10) {
+    return "0" + value;
+  }
+  return value;
 }
 
 function setInnerHTML(id, text) {

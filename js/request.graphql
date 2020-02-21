@@ -1,6 +1,8 @@
-query {
+query ($dateTime: LocalDateTime!) {
 website(id: "U_OV") {
 ...DisruptionList
+...UtrechtCSUtrechtSP
+...UtrechtSPUtrechtCS
 }
 }
 
@@ -63,3 +65,58 @@ validTo
 website
 }
 
+fragment UtrechtCSUtrechtSP on GQWebsite {
+    centraalNaarSciencePark: journey(request: {destination:{name:"Halte P+R Science Park, Utrecht",location:{type:"Point",coordinates:[5.178024723590783,52.091641786969745]}},origin:{name:"Station Utrecht Centraal",location:{type:"Point",coordinates:[5.1109940166984105,52.08977722215508]}},dateTime:$dateTime,via:null,requestType:DEPARTURE_TIME,travelModes:[TRAM, WALKING],additionalTransferTime:false}) {
+      selectedRouteIndex
+      routes {
+        crowding
+        legs {
+          travelOptions {
+            publicTransport {
+              attributes {
+                id
+                content
+              }
+              destination
+              arrival
+              departure
+              plannedArrival
+              plannedDeparture
+              crowding
+              publicNumber
+              transportType
+              modeName
+            }
+          }
+        }
+      }
+    }
+}
+
+fragment UtrechtSPUtrechtCS on GQWebsite {
+    scienceParkNaarCentraal: journey(request: {destination:{name:"Station Utrecht Centraal",location:{type:"Point",coordinates:[5.1109940166984105,52.08977722215508]}},origin:{name:"Halte Heidelberglaan, Utrecht",location:{type:"Point",coordinates:[5.178024723590783,52.091641786969745]}},dateTime:$dateTime,via:null,requestType:DEPARTURE_TIME,travelModes:[TRAM, WALKING],additionalTransferTime:false}) {
+      selectedRouteIndex
+      routes {
+        crowding
+        legs {
+          travelOptions {
+            publicTransport {
+              attributes {
+                id
+                content
+              }
+              destination
+              arrival
+              departure
+              plannedArrival
+              plannedDeparture
+              crowding
+              publicNumber
+              transportType
+              modeName
+            }
+          }
+        }
+      }
+    }
+}
